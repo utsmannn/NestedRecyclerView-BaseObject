@@ -1,6 +1,7 @@
 package com.example.macbook.nestedrecyclerview.adapter;
 
 import android.content.Context;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.macbook.nestedrecyclerview.PagerGridAdapter;
 import com.example.macbook.nestedrecyclerview.R;
 import com.example.macbook.nestedrecyclerview.model.ModelHorizontal;
 import com.example.macbook.nestedrecyclerview.model.ModelHorizontalGrid;
@@ -43,9 +45,14 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         switch (viewType) {
             case GRID_HORIZONTAL:
-                view = inflater.inflate(R.layout.recycler_horizontal_grid, parent, false);
-                holder = new GridHorizontalViewHolder(view);
+
+                /* YANG DI UBAH */
+                /* Mengarah ke layout pager */
+                view = inflater.inflate(R.layout.pager_grid, parent, false);
+                holder = new PagerViewHolder(view); // ini bikin viewholder baru buat pager layout
                 break;
+                /* YANG DI UBAH END */
+
             case HORIZONTAL:
                 view = inflater.inflate(R.layout.recycler_horizontal, parent, false);
                 holder = new HorizontalViewHolder(view);
@@ -56,8 +63,8 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
 
             default:
-                view = inflater.inflate(R.layout.recycler_horizontal_grid, parent, false);
-                holder = new GridHorizontalViewHolder(view);
+                view = inflater.inflate(R.layout.recycler_vertical, parent, false);
+                holder = new VerticalViewHolder(view);
                 break;
         }
         return holder;
@@ -67,7 +74,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() == GRID_HORIZONTAL)
-            gridHorizontalView((GridHorizontalViewHolder) holder);
+            gridHorizontalView((PagerViewHolder) holder);
         if (holder.getItemViewType() == HORIZONTAL)
             horizontalView((HorizontalViewHolder) holder);
         if (holder.getItemViewType() == VERTICAL)
@@ -75,13 +82,26 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     }
 
+    /* YANG DI UBAH */
 
-    private void gridHorizontalView(GridHorizontalViewHolder holder) {
+    /*private void gridHorizontalView(GridHorizontalViewHolder holder) {
 
         RecyclerHorizontalGridAdapter gridHorizontalViewAdapter = new RecyclerHorizontalGridAdapter(getGridViewData());
         holder.recyclerViewGridHorizontal.setLayoutManager(new GridLayoutManager(context, 2, LinearLayoutManager.HORIZONTAL, false));
         holder.recyclerViewGridHorizontal.setAdapter(gridHorizontalViewAdapter);
+    }*/
+
+    private void gridHorizontalView(PagerViewHolder holder) {
+
+        /* item buat grid bawa ke viewpager adapter buat di
+         * pasang di recyclerview */
+        PagerGridAdapter pagerGridAdapter = new PagerGridAdapter(context, getGridViewData());
+        holder.pager.setAdapter(pagerGridAdapter);
     }
+
+    /* YANG DI UBAH END */
+
+
 
     private void horizontalView(HorizontalViewHolder holder) {
 
@@ -116,14 +136,17 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     }
 
-    public class GridHorizontalViewHolder extends RecyclerView.ViewHolder {
+
+    /* di apus ganti view holder pager */
+
+    /*public class GridHorizontalViewHolder extends RecyclerView.ViewHolder {
         RecyclerView recyclerViewGridHorizontal;
 
         public GridHorizontalViewHolder(View itemView) {
             super(itemView);
             recyclerViewGridHorizontal = (RecyclerView) itemView.findViewById(R.id.recycler_view_horizontal_grid);
         }
-    }
+    }*/
 
     public class HorizontalViewHolder extends RecyclerView.ViewHolder {
         RecyclerView recyclerViewHorizontal;
@@ -140,6 +163,17 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public VerticalViewHolder(View itemView) {
             super(itemView);
             recyclerViewVertical = (RecyclerView) itemView.findViewById(R.id.recycler_view_vertical);
+        }
+    }
+
+
+    /* View holder baru buat pager layout */
+    private class PagerViewHolder extends RecyclerView.ViewHolder {
+        ViewPager pager;
+
+        public PagerViewHolder(View itemView) {
+            super(itemView);
+            pager = (ViewPager) itemView.findViewById(R.id.pager_grid);
         }
     }
 }

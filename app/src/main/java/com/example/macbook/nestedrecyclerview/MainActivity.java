@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //ini adalah list dari grid layout
+    // total 8 item
     public static ArrayList<ModelHorizontalGrid> getGridViewData() {
 
         ArrayList<ModelHorizontalGrid> modelHorizontalGrids = new ArrayList<>();
@@ -73,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_main);
+
         MainAdapter adapter = new MainAdapter(this, getObject());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
